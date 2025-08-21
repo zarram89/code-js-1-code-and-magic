@@ -1,3 +1,5 @@
+import {createWizards} from './data.js';
+
 const similarElement = document.querySelector('.setup-similar');
 
 const similarListElement = similarElement.querySelector('.setup-similar-list');
@@ -5,7 +7,9 @@ const similarWizardsTemplate = document.querySelector('#similar-wizard-template'
   .content
   .querySelector('.setup-similar-item');
 
-export const renderSimilarList = (similarWizards) => {
+const similarWizards = createWizards();
+
+export const renderSimilarList = () => {
   const similarListFragment = document.createDocumentFragment();
 
   similarWizards.forEach(({name, colorCoat, colorEyes}) => {
