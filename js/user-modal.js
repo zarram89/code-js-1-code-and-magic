@@ -1,8 +1,12 @@
 import {isEscapeKey, isEnterKey} from './util.js';
+import {renderSimilarList, clearSimilarList} from './similar-list.js';
 
 const userModalElement = document.querySelector('.setup');
+const similarElement = userModalElement.querySelector('.setup-similar');
+similarElement.classList.remove('hidden');
+
 const userModalOpenElement = document.querySelector('.setup-open');
-const userModalCloseElement = document.querySelector('.setup-close');
+const userModalCloseElement = userModalElement.querySelector('.setup-close');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -13,13 +17,13 @@ const onDocumentKeydown = (evt) => {
 
 function openUserModal() {
   userModalElement.classList.remove('hidden');
-
+  renderSimilarList();
   document.addEventListener('keydown', onDocumentKeydown);
 }
 
 function closeUserModal() {
   userModalElement.classList.add('hidden');
-
+  clearSimilarList();
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
@@ -33,7 +37,9 @@ userModalOpenElement.addEventListener('keydown', (evt) => {
   }
 });
 
-userModalCloseElement.addEventListener('click', closeUserModal);
+userModalCloseElement.addEventListener('click', () => {
+  closeUserModal();
+});
 
 userModalCloseElement.addEventListener('keydown', (evt) => {
   if (isEnterKey(evt)) {
@@ -41,4 +47,3 @@ userModalCloseElement.addEventListener('keydown', (evt) => {
   }
 });
 
-export {openUserModal, closeUserModal};
