@@ -1,5 +1,4 @@
-import {getRandomArrayElement, showAlert} from './util.js';
-import {sendData} from './api.js';
+import {getRandomArrayElement} from './util.js';
 
 const Color = {
   FIREBALLS: [
@@ -26,22 +25,13 @@ const Color = {
   ],
 };
 
-const SubmitButtonText = {
-  IDLE: 'Сохранить',
-  SENDING: 'Сохраняю...'
-};
-
 const wizardForm = document.querySelector('.setup-wizard-form');
 const fireballColorElement = wizardForm.querySelector('.setup-fireball-wrap');
-const fireballColorInput = wizardForm.querySelector('[name="fireball-color"]');
-
 const eyesColorElement = wizardForm.querySelector('.wizard-eyes');
-const eyesColorInput = wizardForm.querySelector('[name="eyes-color"]');
-
 const coatColorElement = wizardForm.querySelector('.wizard-coat');
+const fireballColorInput = wizardForm.querySelector('[name="fireball-color"]');
+const eyesColorInput = wizardForm.querySelector('[name="eyes-color"]');
 const coatColorInput = wizardForm.querySelector('[name="coat-color"]');
-
-const submitButton = wizardForm.querySelector('.setup-submit');
 
 fireballColorElement.addEventListener('click', (evt) => {
   const randomColor = getRandomArrayElement(Color.FIREBALLS);
@@ -60,39 +50,3 @@ coatColorElement.addEventListener('click', (evt) => {
   evt.target.style.fill = randomColor;
   coatColorInput.value = randomColor;
 });
-
-const pristine = new Pristine(wizardForm, {
-  classTo: 'setup-wizard-form__element',
-  errorTextParent: 'setup-wizard-form__element',
-  errorTextClass: 'setup-wizard-form__error-text',
-});
-
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
-};
-
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
-
-const setUserFormSubmit = (onSuccess) => {
-  wizardForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    const isValid = pristine.validate();
-    if (isValid) {
-      blockSubmitButton();
-      sendData(new FormData(evt.target))
-        .then(onSuccess)
-        .catch((err) => {
-          showAlert(err.message);
-        }
-        )
-        .finally(unblockSubmitButton);
-    }
-  });
-};
-
-export {setUserFormSubmit};
